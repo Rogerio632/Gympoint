@@ -1,7 +1,7 @@
 import Sequelize, { Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
-class User {
+class User extends Model {
   static init(sequelize) {
     super.init(
       {
@@ -20,6 +20,10 @@ class User {
       }
     });
     return this;
+  }
+
+  checkPassword(password) {
+    return bcrypt.compare(password, this.password_hash);
   }
 }
 export default User;
