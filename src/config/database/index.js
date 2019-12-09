@@ -1,4 +1,5 @@
 import Sequelize from 'sequelize';
+import 'dotenv';
 import User from '../../app/models/User';
 import Student from '../../app/models/Student';
 import Plan from '../../app/models/Plan';
