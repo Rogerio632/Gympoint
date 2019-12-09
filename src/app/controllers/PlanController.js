@@ -38,7 +38,27 @@ class PlanController {
     return res.json(findPlan);
   }
 
-  async store(req, res) {}
+  async store(req, res) {
+    const schema = Yup.object().shape({
+      title: Yup.string().required(),
+      duration: Yup.number().required(),
+      price: Yup.number().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(401).json({ error: 'You writed something wrong.' });
+    }
+
+    const { title, duration, price } = req.body;
+    const savePlan = await Plan.create({
+      title,
+      duration,
+      price,
+      active: true,
+    });
+
+    return res.status(201).json(savePlan);
+  }
 
   async update(req, res) {}
 
