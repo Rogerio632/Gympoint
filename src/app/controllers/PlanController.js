@@ -1,6 +1,5 @@
 import * as Yup from 'yup';
 import Plan from '../models/Plan';
-import User from '../models/User';
 
 class PlanController {
   async index(req, res) {
@@ -8,6 +7,10 @@ class PlanController {
       where: { active: true },
       attributes: ['id', 'title', 'duration', 'price', 'active'],
     });
+
+    if (!plans) {
+      return res.json({ error: 'No one plan has been founded' });
+    }
 
     return res.json(plans);
   }
