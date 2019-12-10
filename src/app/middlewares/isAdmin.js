@@ -4,7 +4,15 @@ export default async (req, res, next) => {
   const isAdmin = await User.findOne({
     where: {
       id: req.userId,
-      isAdmin: true,
+      admin: true,
     },
   });
+
+  if (!isAdmin) {
+    return res
+      .status(401)
+      .json({ error: "You don't have permission to acess this page" });
+  }
+
+  return next();
 };
