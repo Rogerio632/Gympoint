@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import Plan from '../models/Plan';
+import User from '../models/User';
 
 class PlanController {
   async index(req, res) {
@@ -60,8 +61,46 @@ class PlanController {
     return res.status(201).json(savePlan);
   }
 
-  async update(req, res) {}
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      id: Yup.number().required(),
+      title: Yup.string(),
+      duration: Yup.number(),
+      price: Yup.number(),
+    });
 
-  async delete(req, res) {}
+    if (!(await schema.isValid(req.body)))
+      return res.status(400).json({ error: 'You writed something wrong' });
+
+    const { id } = req.body;
+
+    const plan = await Plan.findOne({
+      where: { id },
+    });
+
+    if (!plan) {
+      return res.status(400).json({ error: 'This plan does not exists' });
+    }
+
+    plan.update(req.body);
+
+    return res.json(plan);
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+
+    const plan = await Plan.findOne({
+      where: { id },
+    });
+
+    if (!plan) {
+      return res.status(400).json({ error: 'Plan not found' });
+    }
+
+    plan.destroy();
+
+    return res.json({ message: 'Plan deleted!' });
+  }
 }
 export default new PlanController();
