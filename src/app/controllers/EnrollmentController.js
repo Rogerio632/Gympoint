@@ -1,8 +1,10 @@
 import * as Yup from 'yup';
-import { parseISO, isBefore, addMonths, startOfHour } from 'date-fns';
+import { parseISO, isBefore, addMonths, startOfHour, format } from 'date-fns';
+import { pt } from 'date-fns/locale/pt';
 import Enrollment from '../models/Enrollment';
 import Plan from '../models/Plan';
 import Student from '../models/Student';
+import Mail from '../../lib/mail';
 
 class EnrollmentController {
   async index(req, res) {
@@ -76,11 +78,11 @@ class EnrollmentController {
 
     const { student_id, start_date, plan_id } = req.body;
 
-    const studentExists = await Student.findOne({
+    const findStudent = await Student.findOne({
       where: { id: student_id },
     });
 
-    if (!studentExists) {
+    if (!findStudent) {
       return res
         .status(400)
         .json({ error: 'Oh! This student does not exists' });
@@ -105,7 +107,7 @@ class EnrollmentController {
 
     const plan = await Plan.findOne({
       where: { id: plan_id, active: true },
-      attributes: ['duration', 'price'],
+      attributes: ['title', 'duration', 'price'],
     });
 
     const end_date = addMonths(begin_date, plan.duration);
@@ -119,16 +121,20 @@ class EnrollmentController {
       price,
     });
 
-    return res.json(enrollment);
+    await Mail.sendMail({
+      to: `${findStudent.name} <${findStudent.email}>`,
+      subject: `Sua vida fitness começa agora![Gympoint]`,
+      template: 'cancellation',
+      context: {
+        plan: plan.title,
+        price,
+        end_date: format(end_date, "dd 'de' MMMM 'de' yyyy", {
+          locale: pt,
+        }),
+      },
+    });
 
-    /**
-     * student_id
-     * plan_id
-     * start_date
-     * end_date
-     * price
-     *
-     */
+    return res.json(enrollment);
   }
 
   async update(req, res) {
