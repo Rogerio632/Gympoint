@@ -66,16 +66,15 @@ class PlanController {
 
   async update(req, res) {
     const schema = Yup.object().shape({
-      id: Yup.number().required(),
-      title: Yup.string(),
-      duration: Yup.number(),
-      price: Yup.number(),
+      title: Yup.string().required(),
+      duration: Yup.number().required(),
+      price: Yup.number().required(),
     });
 
     if (!(await schema.isValid(req.body)))
       return res.status(400).json({ error: 'You writed something wrong' });
 
-    const { id } = req.body;
+    const { id } = req.params;
 
     const plan = await Plan.findOne({
       where: { id },
