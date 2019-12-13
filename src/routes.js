@@ -5,6 +5,7 @@ import authMiddleware from './app/middlewares/auth';
 import PlanController from './app/controllers/PlanController';
 import adminMiddleware from './app/middlewares/isAdmin';
 import EnrollmentController from './app/controllers/EnrollmentController';
+import CheckinController from './app/controllers/CheckinController';
 
 const routes = new Router();
 
@@ -35,5 +36,10 @@ routes.get('/enrollment/:id', EnrollmentController.show);
 routes.post('/enrollment', EnrollmentController.store);
 routes.put('/enrollment/:id', EnrollmentController.update);
 routes.delete('/enrollment/:id', EnrollmentController.delete);
+
+/**
+ * Checkin's Routes
+ */
+routes.post('/checkins', CheckinController.store);
 
 export default routes;
