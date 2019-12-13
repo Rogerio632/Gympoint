@@ -6,12 +6,19 @@ import PlanController from './app/controllers/PlanController';
 import adminMiddleware from './app/middlewares/isAdmin';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
+import HelpController from './app/controllers/HelpController';
 
 const routes = new Router();
 
 routes.post('/sessions', SessionController.store);
 
 routes.use(authMiddleware);
+
+/**
+ *  Help's Routes
+ */
+routes.post('/students/:id/help', HelpController.store);
+
 routes.use(adminMiddleware);
 /**
  * Plan's Routes
@@ -40,6 +47,7 @@ routes.delete('/enrollment/:id', EnrollmentController.delete);
 /**
  * Checkin's Routes
  */
-routes.post('/checkins', CheckinController.store);
+routes.post('/students/:id/checkins', CheckinController.store);
+routes.get('/students/:id/checkins', CheckinController.show);
 
 export default routes;
