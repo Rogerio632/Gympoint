@@ -156,7 +156,7 @@ class EnrollmentController {
 
     await enrollment.update({ plan_id, start_date, end_date, price });
 
-    return res.json();
+    return res.json({ plan_id, start_date, end_date, price });
   }
 
   async delete(req, res) {
