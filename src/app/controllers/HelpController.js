@@ -1,4 +1,6 @@
 import * as Yup from 'yup';
+import Queue from '../../lib/Queue';
+import RequestHelpMail from '../jobs/RequestHelpMail';
 import Help from '../models/Help_order';
 import Student from '../models/Student';
 
@@ -77,6 +79,11 @@ class HelpController {
 
     const submitHelp = await Help.create({
       student_id: id,
+      question,
+    });
+
+    await Queue.add(RequestHelpMail.key, {
+      student,
       question,
     });
 
