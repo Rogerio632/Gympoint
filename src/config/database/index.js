@@ -5,7 +5,7 @@ import Student from '../../app/models/Student';
 import Plan from '../../app/models/Plan';
 import Enrollment from '../../app/models/Enrollment';
 import Checkin from '../../app/models/Checkin';
-import Help from '../../app/models/Help';
+import Help from '../../app/models/Help_order';
 import databaseConfig from '../database';
 
 const models = [Enrollment, User, Student, Plan, Checkin, Help];

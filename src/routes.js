@@ -7,6 +7,7 @@ import adminMiddleware from './app/middlewares/isAdmin';
 import EnrollmentController from './app/controllers/EnrollmentController';
 import CheckinController from './app/controllers/CheckinController';
 import HelpController from './app/controllers/HelpController';
+import AnswerController from './app/controllers/AnswerController';
 
 const routes = new Router();
 
@@ -15,9 +16,10 @@ routes.post('/sessions', SessionController.store);
 routes.use(authMiddleware);
 
 /**
- *  Help's Routes
+ *  Help's Routes | NOT ADMIN
  */
-routes.post('/students/:id/help', HelpController.store);
+routes.post('/students/:id/help-orders', HelpController.store);
+routes.get('/student/:id/help-orders', HelpController.show);
 
 routes.use(adminMiddleware);
 /**
@@ -49,5 +51,11 @@ routes.delete('/enrollment/:id', EnrollmentController.delete);
  */
 routes.post('/students/:id/checkins', CheckinController.store);
 routes.get('/students/:id/checkins', CheckinController.show);
+
+/**
+ *  Help's Routes | ADMIN
+ */
+routes.get('/help-orders', HelpController.index);
+routes.post('/help-orders/:id/answer', AnswerController.store);
 
 export default routes;
