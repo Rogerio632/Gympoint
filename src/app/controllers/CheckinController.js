@@ -28,7 +28,7 @@ class CheckinController {
       where: {
         student_id: id,
         created_at: {
-          [Op.between]: [subDays(currentDate, 7), currentDate],
+          [Op.between]: [subDays(currentDate, 6), currentDate],
         },
       },
       include: [
